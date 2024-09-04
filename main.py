@@ -102,14 +102,14 @@ def load_data(args):
     folder_gen = args.gendata_dir
     print(folder_src)
     print(folder_gen)
+    gen_loader = data_loader.load_data(
+        args, folder_gen, args.l_batch_size, infinite_data_loader=True, train=True, num_workers=args.num_workers)
     source_loader, n_class = data_loader.load_data(
         args, folder_src, args.l_batch_size, infinite_data_loader=True, train=True, num_workers=args.num_workers)
     target_train_loader, _ = data_loader.load_data(
         args, folder_tgt, args.u_batch_size, infinite_data_loader=True, train=True, use_fixmatch=use_fixmatch, num_workers=args.num_workers, partial=args.pda)
     target_test_loader, _ = data_loader.load_data(
         args, folder_tgt, args.u_batch_size, infinite_data_loader=False, train=False, num_workers=args.num_workers, partial=args.pda)
-    gen_loader = data_loader.load_data(
-        args, folder_gen, args.l_batch_size, infinite_data_loader=True, train=True, num_workers=args.num_workers)
     return source_loader, target_train_loader, target_test_loader, gen_loader, n_class
 
 def get_model(args):

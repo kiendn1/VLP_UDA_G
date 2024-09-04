@@ -149,6 +149,7 @@ def load_data(args, data_folder, batch_size, train, num_workers=4, weight_sample
         weights = get_classes_weight(data)
     else:
         weights = None
+    print(data_folder, len(data))
     data_loader = get_data_loader(data, batch_size=batch_size,
                                   shuffle=True if train else False,
                                   num_workers=num_workers, weights=weights, **kwargs, drop_last=True if train else False)
