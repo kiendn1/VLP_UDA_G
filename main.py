@@ -306,7 +306,7 @@ def main():
         test(model, target_test_loader, args)
     else:
         print(next(iter(gendata_loader)))
-        print(next(iter(source_loader)))
+        print(next(next(iter(source_loader))))
         train(source_loader, gendata_loader, target_train_loader, target_test_loader, model, optimizer, scheduler, args)
     
 
