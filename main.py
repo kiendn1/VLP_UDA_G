@@ -309,6 +309,8 @@ def main():
     if args.clip:
         test(model, target_test_loader, args)
     else:
+        print(iter(gendata_loader))
+        
         train(source_loader, gendata_loader, target_train_loader, target_test_loader, model, optimizer, scheduler, args)
     
 
