@@ -213,11 +213,7 @@ def train(source_loader, gendata_loader, target_train_loader, target_test_loader
         for _ in tqdm(iterable=range(n_batch),desc=f"Train:[{e}/{args.n_epoch}]"):
             optimizer.zero_grad()
             data_source, label_source = next(iter_source) # .next()
-            # data_gen, label_gen = next(iter_gen)
-            x = next(iter_gen)
-            print(x)
-            print(type(x))
-            print(data_source)
+            data_gen, label_gen = next(iter_gen)
             data_target, _ = next(iter_target) # .next()
             data_source, label_source = data_source.to(args.device), label_source.to(args.device)
             data_gen, label_gen = data_gen.to(args.device), label_gen.to(args.device)
@@ -310,7 +306,7 @@ def main():
         test(model, target_test_loader, args)
     else:
         print(iter(gendata_loader))
-        
+        print(iter(source_loader))
         train(source_loader, gendata_loader, target_train_loader, target_test_loader, model, optimizer, scheduler, args)
     
 
