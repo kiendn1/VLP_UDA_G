@@ -19,8 +19,8 @@ except ImportError:
     BICUBIC = Image.BICUBIC
 
 
-if packaging.version.parse(torch.__version__) < packaging.version.parse("1.7.1"):
-    warnings.warn("PyTorch version 1.7.1 or higher is recommended")
+# if packaging.version.parse(torch.__version__) < packaging.version.parse("1.7.1"):
+#     warnings.warn("PyTorch version 1.7.1 or higher is recommended")
 
 
 __all__ = ["available_models", "load", "tokenize"]
