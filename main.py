@@ -100,9 +100,7 @@ def load_data(args):
     folder_src = os.path.join(args.data_dir, args.src_domain)
     folder_tgt = os.path.join(args.data_dir, args.tgt_domain)
     folder_gen = args.gendata_dir
-    print(folder_src)
-    print(folder_gen)
-    gen_loader = data_loader.load_data(
+    gen_loader, n_class = data_loader.load_data(
         args, folder_gen, args.l_batch_size, infinite_data_loader=True, train=True, num_workers=args.num_workers)
     source_loader, n_class = data_loader.load_data(
         args, folder_src, args.l_batch_size, infinite_data_loader=True, train=True, num_workers=args.num_workers)
@@ -305,8 +303,6 @@ def main():
     if args.clip:
         test(model, target_test_loader, args)
     else:
-        print(next(iter(gendata_loader)))
-        print(next(next(iter(source_loader))))
         train(source_loader, gendata_loader, target_train_loader, target_test_loader, model, optimizer, scheduler, args)
     
 
