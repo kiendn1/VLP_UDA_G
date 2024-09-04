@@ -44,7 +44,7 @@ def get_parser():
 
     # training related
     parser.add_argument('--l_batch_size', type=int, default=32)
-    parser.add_argument('--u_batch_size', type=int, default=32)
+    parser.add_argument('--u_batch_size', type=int, default=16)
     parser.add_argument('--n_epoch', type=int, default=20)
     parser.add_argument('--label_smoothing', type=float, default=0.0)
     parser.add_argument("--n_iter_per_epoch", type=int, default=500, help="Used in Iteration-based training")
@@ -101,7 +101,7 @@ def load_data(args):
     folder_tgt = os.path.join(args.data_dir, args.tgt_domain)
     folder_gen = args.gendata_dir
     gen_loader, n_class = data_loader.load_data(
-        args, folder_gen, args.l_batch_size, infinite_data_loader=True, train=True, num_workers=args.num_workers)
+        args, folder_gen, args.u_batch_size, infinite_data_loader=True, train=True, num_workers=args.num_workers)
     source_loader, n_class = data_loader.load_data(
         args, folder_src, args.l_batch_size, infinite_data_loader=True, train=True, num_workers=args.num_workers)
     target_train_loader, _ = data_loader.load_data(
