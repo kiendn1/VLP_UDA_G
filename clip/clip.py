@@ -3,7 +3,7 @@ import os
 import urllib
 import warnings
 from typing import Any, Union, List
-from packaging
+import packaging
 
 import torch
 from PIL import Image
