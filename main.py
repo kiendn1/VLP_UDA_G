@@ -215,6 +215,7 @@ def train(source_loader, gendata_loader, target_train_loader, target_test_loader
             x = next(iter_gen)
             print(x)
             print(type(x))
+            print(data_source)
             data_target, _ = next(iter_target) # .next()
             data_source, label_source = data_source.to(args.device), label_source.to(args.device)
             data_gen, label_gen = data_gen.to(args.device), label_gen.to(args.device)
