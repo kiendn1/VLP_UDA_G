@@ -100,6 +100,8 @@ def load_data(args):
     folder_src = os.path.join(args.data_dir, args.src_domain)
     folder_tgt = os.path.join(args.data_dir, args.tgt_domain)
     folder_gen = args.gendata_dir
+    print(folder_src)
+    print(folder_gen)
     source_loader, n_class = data_loader.load_data(
         args, folder_src, args.l_batch_size, infinite_data_loader=True, train=True, num_workers=args.num_workers)
     target_train_loader, _ = data_loader.load_data(
