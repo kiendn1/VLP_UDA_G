@@ -107,8 +107,7 @@ def load_data(args):
     target_test_loader, _ = data_loader.load_data(
         args, folder_tgt, args.u_batch_size, infinite_data_loader=False, train=False, num_workers=args.num_workers, partial=args.pda)
     gen_loader = data_loader.load_data(
-        args, folder_gen, args.l_batch_size, infinite_data_loader=True, train=True, num_workers=args.num_workers
-    )
+        args, folder_gen, args.l_batch_size, infinite_data_loader=True, train=True, num_workers=args.num_workers)
     return source_loader, target_train_loader, target_test_loader, gen_loader, n_class
 
 def get_model(args):
@@ -212,7 +211,10 @@ def train(source_loader, gendata_loader, target_train_loader, target_test_loader
         for _ in tqdm(iterable=range(n_batch),desc=f"Train:[{e}/{args.n_epoch}]"):
             optimizer.zero_grad()
             data_source, label_source = next(iter_source) # .next()
-            data_gen, label_gen = next(iter_gen)
+            # data_gen, label_gen = next(iter_gen)
+            x = next(iter_gen)
+            print(x)
+            print(type(x))
             data_target, _ = next(iter_target) # .next()
             data_source, label_source = data_source.to(args.device), label_source.to(args.device)
             data_gen, label_gen = data_gen.to(args.device), label_gen.to(args.device)
