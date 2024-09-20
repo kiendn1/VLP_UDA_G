@@ -290,7 +290,7 @@ def main():
     setattr(args, "log_dir", log_dir)
     print(args)
     model = get_model(args)
-    print(model)
+    # print(model)
     optimizer = get_optimizer(model, args)
 
     if args.scheduler:
