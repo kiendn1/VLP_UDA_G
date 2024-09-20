@@ -131,7 +131,6 @@ class TransferNet(nn.Module):
                 target_a = gen_label
                 target_b = target_pred_mix[rand_index]
                 mix_img = gen_img.clone().detach().cuda()
-                print('mix_img', mix_img.size())
                 bbx1, bby1, bbx2, bby2 = rand_bbox(mix_img.size(), lam)
                 mix_img[:, :, bbx1:bbx2, bby1:bby2] = target_img[rand_index, :, bbx1:bbx2, bby1:bby2]
                 # adjust lambda to exactly match pixel ratio
