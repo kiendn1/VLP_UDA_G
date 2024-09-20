@@ -58,6 +58,10 @@ def get_parser():
     parser.add_argument('--fixmatch', default=False, action='store_true')
     parser.add_argument('--fixmatch_threshold', type=float, default=0.95)
     parser.add_argument('--fixmatch_factor', type=float, default=0.5)
+    
+    parser.add_argument('--cutmix', type=bool, default=True)
+    parser.add_argument('--cutmix_prob', type=float, default=0)
+    parser.add_argument('--beta', type=float, default=0)
 
     # optimizer related
     parser.add_argument('--lr', type=float, default=3e-4)
@@ -224,14 +228,14 @@ def train(source_loader, gendata_loader, target_train_loader, target_test_loader
             if args.use_amp:
                 # mixture precision
                 with autocast():
-                    clf_loss, transfer_loss = model(data_source, data_gen, data_target, label_source, label_gen, data_target_strong)
+                    clf_loss, transfer_loss = model(args, data_source, data_gen, data_target, label_source, label_gen, data_target_strong)
                     loss = clf_loss + transfer_loss
                 scaler.scale(loss).backward()
                 scaler.step(optimizer)
                 scaler.update()
             else:
                 # fully precision
-                clf_loss, transfer_loss = model(data_source, data_gen, data_target, label_source, label_gen, data_target_strong, label_set)
+                clf_loss, transfer_loss = model(args, data_source, data_gen, data_target, label_source, label_gen, data_target_strong, label_set)
                 loss = clf_loss + transfer_loss
                 loss.backward()
                 optimizer.step()

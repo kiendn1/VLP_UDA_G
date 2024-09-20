@@ -44,5 +44,5 @@ class CMKD(nn.Module):
             distill_loss = self.args.lambda1 * lamb *self.gini_impurity(target_pred_mix,1-coe)
             reg_loss = self.regularization_term(target_pred_clip, source_logit_clip, source_label,lamb)
         self.lamb.step()
-        return task_loss + distill_loss + reg_loss
+        return task_loss + distill_loss + reg_loss, target_pred_mix
 
