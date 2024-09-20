@@ -139,7 +139,7 @@ class TransferNet(nn.Module):
                 # compute output
                 mix_output = self.base_network.forward_features(mix_img)
                 mix_logits = self.classifier_layer(mix_output)
-                mix_clf_loss = self.clf_loss(mix_logits, target_a) * lam + self.loss(mix_logits, target_b) * (1. - lam)
+                mix_clf_loss = self.clf_loss(mix_logits, target_a) * lam + self.clf_loss(mix_logits, target_b) * (1. - lam)
                 
                 clf_loss = clf_loss + mix_clf_loss
         return clf_loss, transfer_loss
