@@ -65,29 +65,29 @@ class TransferNet(nn.Module):
             self.cmkd = cmkd.CMKD(args)
             self.clf_loss = torch.nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
 
-    def forward(self, args, source, gen, target_img, source_label, gen_label, target_strong=None, label_set=None):
+    def forward(self, args, source_img, gen_img, target_img, source_label, gen_label, target_strong=None, label_set=None):
         self.base_network.apply(fix_bn)
-        source = self.base_network.forward_features(source)
+        source_feat = self.base_network.forward_features(source_img)
 
         # calculate source classification loss Lclf
-        source_logits = self.classifier_layer(source)
+        source_logits = self.classifier_layer(source_feat)
         source_clf_loss = self.clf_loss(source_logits, source_label)
         
-        gen = self.base_network.forward_features(gen)
+        gen_feat = self.base_network.forward_features(gen_img)
 
         # calculate source classification loss Lclf
-        gen_logits = self.classifier_layer(gen)
+        gen_logits = self.classifier_layer(gen_feat)
         gen_clf_loss = self.clf_loss(gen_logits, gen_label)
         
         clf_loss = source_clf_loss + gen_clf_loss
 
         if not self.args.baseline:
-            source_logits_clip = self.base_network.forward_head(source)
-            target = self.base_network.forward_features(target_img)
+            source_logits_clip = self.base_network.forward_head(source_feat)
+            target_feat = self.base_network.forward_features(target_img)
 
             # calculate calibrated probability alignment loss Lcpa
-            target_clip_logits = self.base_network.forward_head(target)
-            target_logits = self.classifier_layer(target)
+            target_clip_logits = self.base_network.forward_head(target_feat)
+            target_logits = self.classifier_layer(target_feat)
 
             # calculate calibrated gini impurity loss Lcgi
             transfer_loss, target_pred_mix = self.cmkd(target_logits, target_clip_logits, source_logits_clip, source_label,label_set)
@@ -130,12 +130,12 @@ class TransferNet(nn.Module):
                 rand_index = torch.randperm(target_img.size()[0])[:16].cuda()
                 target_a = gen_label
                 target_b = target_pred_mix[rand_index]
-                mix_img = gen.clone().detach().cuda()
+                mix_img = gen_img.clone().detach().cuda()
                 print('mix_img', mix_img.size())
                 bbx1, bby1, bbx2, bby2 = rand_bbox(mix_img.size(), lam)
                 mix_img[:, :, bbx1:bbx2, bby1:bby2] = target_img[rand_index, :, bbx1:bbx2, bby1:bby2]
                 # adjust lambda to exactly match pixel ratio
-                lam = 1 - ((bbx2 - bbx1) * (bby2 - bby1) / (gen.size()[-1] * gen.size()[-2]))
+                lam = 1 - ((bbx2 - bbx1) * (bby2 - bby1) / (gen_img.size()[-1] * gen_img.size()[-2]))
                 # compute output
                 mix_output = self.base_network.forward_features(mix_img)
                 mix_logits = self.classifier_layer(mix_output)
