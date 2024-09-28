@@ -307,4 +307,5 @@ def main():
     
 
 if __name__ == "__main__":
+    # no mixing method, just only source, gen, target domain
     main()
